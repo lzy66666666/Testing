@@ -109,6 +109,7 @@ ggplot(data = exam_data,
   geom_point(color = 'pink') +
   geom_smooth(size = 0.25)
 ```
+
 # Plotting trellis using facet
 
 ```{r}
@@ -199,17 +200,17 @@ ggplot(data = exam_data,
   geom_bar() +
   ylim(c(0,230))+
   geom_text(stat = 'count',
-            aes(label = paste(..count.., ', ', round(..count../sum(..count..) * 100, 1), '%')),
+            aes(label = paste(after_stat(count), ', ', round(after_stat(count)/sum(count) * 100, 1), '%')),
             color = 'black',
             size = 3,
             vjust = -0.5) +
   xlab('Race') +
-  ylab('No. of Pupils') +
-  theme_minimal() +
-  theme(panel.background = element_rect(fill = 'grey80', color = 'white', size = 1, linetype = 'solid'),
-        panel.grid.major = element_line(color = 'white', linetype = 'solid', linewidth = 0.5),
-        panel.grid.minor = element_line(color = 'white', linetype = 'solid', linewidth = 0.5),
-        axis.title.y = element_text(angle = 0))
+  ylab('No. of Pupils')
+  # theme_minimal() +
+  # theme(panel.background = element_rect(fill = 'grey80', color = 'white', size = 1, linetype = 'solid'),
+  #       panel.grid.major = element_line(color = 'white', linetype = 'solid', linewidth = 0.5),
+  #       panel.grid.minor = element_line(color = 'white', linetype = 'solid', linewidth = 0.5),
+  #       axis.title.y = element_text(angle = 0))
 ```
 
 # Plotting barchart using requested format (slide 59)
@@ -221,11 +222,31 @@ ggplot(data = exam_data,
   geom_histogram(bins = 20,
                  fill = 'light blue',
                  color = 'black') + 
-  geom_vline(aes(xintercept = mean(MATHS),
-                 color = 'red')) +
+  geom_vline(aes(xintercept = mean(MATHS, na.rm = T),
+                 color = 'red',
+                 linetype = 'dashed'),
+             show.legend = F) +
+    geom_vline(aes(xintercept = median(MATHS, na.rm = T),
+                 color = 'black',
+                 linetype = 'dashed'),
+             show.legend = F) +
   xlab('MATHS') +
-  ylab('count') +
-  theme(panel.background = element_rect(fill = 'grey80', color = 'white', size = 1, linetype = 'solid'),
-        panel.grid.major = element_line(color = 'white', linetype = 'solid', linewidth = 0.5),
-        panel.grid.minor = element_line(color = 'white', linetype = 'solid', linewidth = 0.5))
+  ylab('count')
+
+```
+
+# Plotting barchart for requested analysis (slide 60)
+
+```{r}
+#Don't know how to do this part...
+ggplot(data = exam_data,
+       aes(x = ENGLISH,
+           fill = GENDER)) +
+  geom_histogram() +
+  facet_grid(~ GENDER) +
+  geom_histogram(aes(x = ENGLISH),
+                 alpha = 0.5) +  
+  xlab('ENGLISH') +
+  ylab('count')
+
 ```
